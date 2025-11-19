@@ -1,0 +1,123 @@
+<!-- detalle-solicitud.component.html -->
+<div class="contenedor-detalle">
+    <div class="cabecera">
+        <button class="btn-volver" (click)="volverALista()">
+            ← Volver a la lista
+        </button>
+        <h1>Detalle de Solicitud</h1>
+    </div>
+
+    <div *ngIf="solicitud; else noEncontrado" class="contenido-detalle">
+        <!-- Tarjeta de información de la solicitud -->
+        <div class="tarjeta-solicitud">
+            <div class="tarjeta-cabecera">
+                <h2>Solicitud {{ solicitud.folio }}</h2>
+                <span class="badge-estado" [class]="'estado-' + solicitud.estado.toLowerCase()">
+                    {{ solicitud.estado }}
+                </span>
+            </div>
+
+            <div class="tarjeta-contenido">
+                <div class="grid-datos">
+                    <div class="campo">
+                        <label>ID:</label>
+                        <span>{{ solicitud.id }}</span>
+                    </div>
+                    <div class="campo">
+                        <label>Folio:</label>
+                        <span>{{ solicitud.folio }}</span>
+                    </div>
+                    <div class="campo">
+                        <label>Nombre:</label>
+                        <span>{{ solicitud.nombre }}</span>
+                    </div>
+                    <div class="campo">
+                        <label>Teléfono:</label>
+                        <span>{{ solicitud.telefono }}</span>
+                    </div>
+                    <div class="campo">
+                        <label>Categoría:</label>
+                        <span>{{ solicitud.categoria }}</span>
+                    </div>
+                    <div class="campo">
+                        <label>Subcategoría:</label>
+                        <span>{{ solicitud.subcategoria }}</span>
+                    </div>
+                    <div class="campo">
+                        <label>Ubicación:</label>
+                        <span>{{ solicitud.ubicacion }}</span>
+                    </div>
+                    <div class="campo">
+                        <label>Evidencia:</label>
+                        <span>
+                            <a [href]="solicitud.evidencia_url" target="_blank" class="enlace-evidencia"
+                                *ngIf="solicitud.evidencia_url">
+                                Ver evidencia
+                            </a>
+                            <span *ngIf="!solicitud.evidencia_url" class="sin-evidencia">Sin evidencia</span>
+                        </span>
+                    </div>
+                    <div class="campo">
+                        <label>Estado:</label>
+                        <span class="badge-estado" [class]="'estado-' + solicitud.estado.toLowerCase()">
+                            {{ solicitud.estado }}
+                        </span>
+                    </div>
+                    <div class="campo">
+                        <label>Fecha:</label>
+                        <span>{{ solicitud.fecha | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                    <div class="campo">
+                        <label>Usuario Asignado:</label>
+                        <span>{{ solicitud.usuario_asignado }}</span>
+                    </div>
+                    <div class="campo">
+                        <label>Área:</label>
+                        <span>{{ solicitud.area }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de asignación de técnico -->
+        <div class="seccion-asignacion">
+            <h3>Asignar Técnico</h3>
+
+            <div class="formulario-asignacion">
+                <div class="campo-formulario">
+                    <label for="tecnico">Seleccionar Técnico:</label>
+                    <select id="tecnico" [(ngModel)]="tecnicoSeleccionado" class="select-tecnico">
+                        <option [ngValue]="null">-- Seleccione un técnico --</option>
+                        <option *ngFor="let tecnico of tecnicos" [value]="tecnico.id"
+                            [disabled]="tecnico.disponibilidad !== 'Disponible'">
+                            {{ tecnico.nombre }} - {{ tecnico.especialidad }} ({{ tecnico.disponibilidad }})
+                        </option>
+                    </select>
+                </div>
+
+                <div class="campo-formulario" *ngIf="tecnicoSeleccionado">
+                    <label for="notas">Notas de Asignación:</label>
+                    <textarea id="notas" [(ngModel)]="notasAsignacion"
+                        placeholder="Agregue notas adicionales para la asignación..." class="textarea-notas"
+                        rows="4"></textarea>
+                </div>
+
+                <div class="acciones">
+                    <button class="btn-asignar" (click)="asignarTecnico()" [disabled]="!tecnicoSeleccionado">
+                        Asignar Técnico
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #noEncontrado>
+        <div class="mensaje-error">
+            <h2>Solicitud no encontrada</h2>
+            <p>La solicitud que buscas no existe o ha sido eliminada.</p>
+            <button class="btn-volver" (click)="volverALista()">
+                Volver a la lista
+            </button>
+        </div>
+    </ng-template>
+</div>

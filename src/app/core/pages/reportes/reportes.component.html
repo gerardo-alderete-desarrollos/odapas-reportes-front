@@ -1,0 +1,89 @@
+<!-- mi-tabla.component.html -->
+<div class="contenedor-tabla">
+  <div class="controles">
+    <input 
+      type="text" 
+      [(ngModel)]="busqueda" 
+      (input)="filtrarDatos()"
+      placeholder="Buscar..."
+      class="buscador">
+  </div>
+
+  <div class="tabla-responsive">
+    <table class="tabla-personalizada">
+      <thead>
+        <tr>
+          <th (click)="ordenarColumna('id')" [class]="obtenerClaseOrden('id')">
+            ID
+          </th>
+          <th (click)="ordenarColumna('folio')" [class]="obtenerClaseOrden('folio')">
+            Folio
+          </th>
+          <th (click)="ordenarColumna('nombre')" [class]="obtenerClaseOrden('nombre')">
+            Nombre
+          </th>
+          <th (click)="ordenarColumna('telefono')" [class]="obtenerClaseOrden('telefono')">
+            Teléfono
+          </th>
+          <th (click)="ordenarColumna('categoria')" [class]="obtenerClaseOrden('categoria')">
+            Categoría
+          </th>
+          <th (click)="ordenarColumna('subcategoria')" [class]="obtenerClaseOrden('subcategoria')">
+            Subcategoría
+          </th>
+          <th (click)="ordenarColumna('ubicacion')" [class]="obtenerClaseOrden('ubicacion')">
+            Ubicación
+          </th>
+          <th (click)="ordenarColumna('evidencia_url')" [class]="obtenerClaseOrden('evidencia_url')">
+            Evidencia
+          </th>
+          <th (click)="ordenarColumna('estado')" [class]="obtenerClaseOrden('estado')">
+            Estado
+          </th>
+          <th (click)="ordenarColumna('fecha')" [class]="obtenerClaseOrden('fecha')">
+            Fecha
+          </th>
+          <th (click)="ordenarColumna('usuario_asignado')" [class]="obtenerClaseOrden('usuario_asignado')">
+            Usuario
+          </th>
+          <th (click)="ordenarColumna('area')" [class]="obtenerClaseOrden('area')">
+            Área
+          </th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of datosFiltrados">
+          <td data-label="ID">{{ item.id }}</td>
+          <td data-label="Folio">{{ item.folio }}</td>
+          <td data-label="Nombre">{{ item.nombre }}</td>
+          <td data-label="Teléfono">{{ item.telefono }}</td>
+          <td data-label="Categoría">{{ item.categoria }}</td>
+          <td data-label="Subcategoría">{{ item.subcategoria }}</td>
+          <td data-label="Ubicación">{{ item.ubicacion }}</td>
+          <td data-label="Evidencia">
+            <a [href]="item.evidencia_url" target="_blank" class="enlace-evidencia" *ngIf="item.evidencia_url">
+              Ver evidencia
+            </a>
+            <span *ngIf="!item.evidencia_url" class="sin-evidencia">Sin evidencia</span>
+          </td>
+          <td data-label="Estado">
+            <span class="badge-estado" [class]="'estado-' + item.estado.toLowerCase()">
+              {{ item.estado }}
+            </span>
+          </td>
+          <td data-label="Fecha">{{ item.fecha | date:'dd/MM/yyyy' }}</td>
+          <td data-label="Usuario Asignado">{{ item.usuario_asignado }}</td>
+          <td data-label="Área">{{ item.area }}</td>
+          <td data-label="Acciones">
+            <a 
+              (click)="goToDetalleReporte(item)"
+              class="btn-editar">
+              Editar
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
