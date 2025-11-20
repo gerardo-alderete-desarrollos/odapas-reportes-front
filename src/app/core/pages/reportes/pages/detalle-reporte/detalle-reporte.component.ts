@@ -2,22 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Reporte } from 'src/app/core/shared/interfaces/reporte.model';
+import { ReporteService } from 'src/app/core/shared/services/reporte.service';
 
 
-interface TablaItem {
-  id: number;
-  folio: string;
-  nombre: string;
-  telefono: string;
-  categoria: string;
-  subcategoria: string;
-  ubicacion: string;
-  evidencia_url: string;
-  estado: string;
-  fecha: string;
-  usuario_asignado: string;
-  area: string;
-}
+
 
 
 interface Tecnico {
@@ -35,8 +24,8 @@ interface Tecnico {
   imports: [CommonModule, FormsModule, RouterModule],
 })
 export class DetalleReporteComponent implements OnInit {
-  solicitudId: number | null = null;
-  solicitud: TablaItem | null = null;
+  reporteId: number | null = null;
+  reporte: Reporte | null = null;
   
   tecnicos: Tecnico[] = [
     { id: 1, nombre: 'Juan Pérez García', especialidad: 'Hardware y Redes', disponibilidad: 'Disponible' },
@@ -50,62 +39,48 @@ export class DetalleReporteComponent implements OnInit {
   tecnicoSeleccionado: number | null = null;
   notasAsignacion: string = '';
 
-  // Datos de ejemplo (deberían venir de un servicio)
-  datosEjemplo: TablaItem[] = [
-    {
-      id: 1,
-      folio: 'FOL-001',
-      nombre: 'Juan Pérez García',
-      telefono: '555-123-4567',
-      categoria: 'Soporte Técnico',
-      subcategoria: 'Hardware',
-      ubicacion: 'Edificio A, Piso 2',
-      evidencia_url: 'https://ejemplo.com/evidencia1.jpg',
-      estado: 'Activo',
-      fecha: '2024-01-15',
-      usuario_asignado: 'Maria Lopez',
-      area: 'TI'
-    },
-    // ... (incluir los otros 19 registros que te proporcioné anteriormente)
-  ];
-
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router, 
+    private reporteService: ReporteService
   ) {}
 
   ngOnInit() {
-    this.cargarSolicitud();
+    this.cargarReporte();
   }
 
-  cargarSolicitud() {
+  cargarReporte() {
     debugger
-        this.solicitudId = Number(this.route.snapshot.paramMap.get('id'));
+        this.reporteId = Number(this.route.snapshot.paramMap.get('id'));
 
-    if (this.solicitudId) {
-      this.solicitud = this.datosEjemplo.find(item => item.id === this.solicitudId) || null;
-      
-      // Si no encuentra la solicitud, redirigir a la lista
-      if (!this.solicitud) {
-        this.router.navigate(['/']);
+    if (this.reporteId) {
+      this.reporteService.getReporte(this.reporteId).subscribe({
+      next: (resp) => {
+        this.reporte = resp;
+
+        console.log('Reporte cargado:', this.reporte);
+      },
+      error: (err) => {
+        console.error('Error al obtener reportes:', err);
       }
+    });
     }
   }
 
   asignarTecnico() {
-    if (this.tecnicoSeleccionado && this.solicitud) {
+    if (this.tecnicoSeleccionado && this.reporte) {
       const tecnico = this.tecnicos.find(t => t.id === this.tecnicoSeleccionado);
       
       // Aquí iría la lógica para guardar la asignación
       console.log('Asignando técnico:', {
-        solicitudId: this.solicitud.id,
+        reporteId: this.reporte.id,
         tecnicoId: this.tecnicoSeleccionado,
         tecnico: tecnico?.nombre,
         notas: this.notasAsignacion
       });
 
       // Simular guardado exitoso
-      alert(`Técnico ${tecnico?.nombre} asignado correctamente a la solicitud ${this.solicitud.folio}`);
+      alert(`Técnico ${tecnico?.nombre} asignado correctamente a la reporte ${this.reporte.folio}`);
       
       // Limpiar formulario
       this.tecnicoSeleccionado = null;

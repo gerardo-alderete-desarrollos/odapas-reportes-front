@@ -8,6 +8,7 @@ import { FooterComponent } from './core/shared/components/footer/footer.componen
 import { HeaderComponent } from './core/shared/components/header/header.component';
 import { ReportesComponent } from './core/pages/reportes/reportes.component';
 import { DetalleReporteComponent } from './core/pages/reportes/pages/detalle-reporte/detalle-reporte.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { DetalleReporteComponent } from './core/pages/reportes/pages/detalle-rep
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
