@@ -9,6 +9,8 @@ import { HeaderComponent } from './core/shared/components/header/header.componen
 import { ReportesComponent } from './core/pages/reportes/reportes.component';
 import { DetalleReporteComponent } from './core/pages/reportes/pages/detalle-reporte/detalle-reporte.component';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './core/pages/auth/login/login.component';
+import { RegisterComponent } from './core/pages/auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
     CallcenterComponent,
     HeaderComponent,
     FooterComponent,
+    //LoginComponent,
+    //RegisterComponent,
     //DetalleReporteComponent
   ],
   imports: [

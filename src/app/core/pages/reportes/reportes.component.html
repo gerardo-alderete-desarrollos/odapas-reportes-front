@@ -79,7 +79,8 @@
             <a 
               (click)="goToDetalleReporte(item)"
               class="btn-editar">
-              Editar
+              {{item.estado.toLowerCase() === 'completado' ? 'vizualizar' : 'Editar'}}
+          
             </a>
           </td>
         </tr>

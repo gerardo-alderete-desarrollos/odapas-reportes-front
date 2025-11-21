@@ -3,37 +3,54 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReportesComponent } from './core/pages/reportes/reportes.component';
 import { CallcenterComponent } from './core/pages/callcenter/callcenter.component';
 import { DetalleReporteComponent } from './core/pages/reportes/pages/detalle-reporte/detalle-reporte.component';
+import { LoginComponent } from './core/pages/auth/login/login.component';
+import { RegisterComponent } from './core/pages/auth/register/register.component';
+import { AuthGuard } from './core/shared/guard/auth.guard';
+import { NoAuthGuard } from './core/shared/guard/no-auth.guard';
 
 const routes: Routes = [
-  // Opción 1: Ruta principal redirige a /reportes
+  // Redirige a /signin
   {
     path: '',
-    redirectTo: '/reportes',
+    redirectTo: 'signin',
     pathMatch: 'full'
   },
+
+  // Evitar que usuarios logueados entren a Login/Register
+  {
+    path: 'signin',
+    //canActivate: [NoAuthGuard],
+    component: LoginComponent
+  },
+  {
+    path: 'signup',
+    //canActivate: [NoAuthGuard],
+    component: RegisterComponent
+  },
+
+  // Rutas protegidas con token
   {
     path: 'reportes',
+    canActivate: [AuthGuard],
     component: ReportesComponent
   },
   {
-    path: 'callcenter',
-    component: CallcenterComponent
-  },
-  {
     path: 'reporte/:id',
+    canActivate: [AuthGuard],
     component: DetalleReporteComponent
   },
 
-  // Opción 2: Ruta principal muestra directamente el componente
-  // {
-  //   path: '',
-  //   component: ReportesComponent
-  // },
+  // No protegida (si lo deseas puedes agregar guard)
+  {
+    path: 'callcenter',
+    canActivate: [AuthGuard], // opcional
+    component: CallcenterComponent
+  },
 
-  // Ruta para páginas no encontradas (404)
+  // Ruta 404
   {
     path: '**',
-    redirectTo: '/reportes'
+    redirectTo: 'signin'
   }
 ];
 
@@ -41,4 +58,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -12,7 +12,7 @@
         <div class="tarjeta-reporte">
             <div class="tarjeta-cabecera">
                 <h2>reporte {{ reporte.folio }}</h2>
-                <span class="badge-estado" [class]="'estado-' + reporte.estado.toLowerCase()">
+                <span class="badge-estado" [class]="'estado-' + reporte.estado?.toLowerCase()">
                     {{ reporte.estado }}
                 </span>
             </div>
@@ -80,7 +80,7 @@
         </div>
 
         <!-- Sección de asignación de técnico -->
-        <div class="seccion-asignacion">
+        <div class="seccion-asignacion" *ngIf="usuarioLoggeado.rol === 'callcenter'">
             <h3>Asignar Técnico</h3>
 
             <div class="formulario-asignacion">
@@ -88,9 +88,8 @@
                     <label for="tecnico">Seleccionar Técnico:</label>
                     <select id="tecnico" [(ngModel)]="tecnicoSeleccionado" class="select-tecnico">
                         <option [ngValue]="null">-- Seleccione un técnico --</option>
-                        <option *ngFor="let tecnico of tecnicos" [value]="tecnico.id"
-                            [disabled]="tecnico.disponibilidad !== 'Disponible'">
-                            {{ tecnico.nombre }} - {{ tecnico.especialidad }} ({{ tecnico.disponibilidad }})
+                        <option *ngFor="let tecnico of tecnicos" [value]="tecnico.id">
+                            {{ tecnico.nombre }} - {{ tecnico.area }} ({{ tecnico.rol }})
                         </option>
                     </select>
                 </div>
@@ -111,23 +110,22 @@
         </div>
 
         <!-- Seccion cambiar estado -->
-     <div class="seccion-asignacion">
-            <h3>Asignar Técnico</h3>
+        <div class="seccion-asignacion" *ngIf="usuarioLoggeado.rol === 'tecnico'">
+            <h3>Estado</h3>
 
             <div class="formulario-asignacion">
                 <div class="campo-formulario">
-                    <label for="tecnico">Seleccionar Técnico:</label>
-                    <select id="tecnico" [(ngModel)]="tecnicoSeleccionado" class="select-tecnico">
-                        <option [ngValue]="null">-- Seleccione un técnico --</option>
-                        <option *ngFor="let tecnico of tecnicos" [value]="tecnico.id"
-                            [disabled]="tecnico.disponibilidad !== 'Disponible'">
-                            {{ tecnico.nombre }} - {{ tecnico.especialidad }} ({{ tecnico.disponibilidad }})
-                        </option>
+                    <label for="estado">Favor cambia de estado</label>
+                    <select class="select-tecnico">
+                        <option [ngValue]="null">-- Estado --</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="asignado">Asignado</option>
+                        <option value="completado">Completado</option>
                     </select>
                 </div>
 
-                <div class="campo-formulario" *ngIf="tecnicoSeleccionado">
-                    <label for="notas">Notas de Asignación:</label>
+                <div class="campo-formulario">
+                    <label for="notas">Notas de estado:</label>
                     <textarea id="notas" [(ngModel)]="notasAsignacion"
                         placeholder="Agregue notas adicionales para la asignación..." class="textarea-notas"
                         rows="4"></textarea>
@@ -135,7 +133,7 @@
 
                 <div class="acciones">
                     <button class="btn-asignar" (click)="asignarTecnico()" [disabled]="!tecnicoSeleccionado">
-                        Asignar Técnico
+                        Enviar
                     </button>
                 </div>
             </div>
