@@ -1,0 +1,19 @@
+<h3>Formulario de reporte</h3>
+
+<label>Nombre:</label>
+<input [(ngModel)]="nombre">
+
+<label>Teléfono:</label>
+<input [(ngModel)]="telefono">
+
+<label>
+    Ubicación:
+    <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">
+        (Google Maps)
+    </a>
+</label><input [(ngModel)]="ubicacion">
+
+<label>Evidencia (opcional):</label>
+<input type="file" (change)="onFile($event)" />
+
+<button (click)="enviarFormulario()">Enviar reporte</button>

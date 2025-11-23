@@ -1,0 +1,66 @@
+h3 {
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #4a148c;
+    /* Morado oscuro */
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 600;
+    color: #333;
+}
+
+input[type="text"],
+input[type="file"],
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: 0.2s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #7b1fa2;
+    /* Morado suave */
+    box-shadow: 0 0 4px rgba(123, 31, 162, 0.3);
+}
+
+button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background: #7b1fa2;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+    background: #4a148c;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* Contenedor responsivo */
+:host {
+    display: block;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}

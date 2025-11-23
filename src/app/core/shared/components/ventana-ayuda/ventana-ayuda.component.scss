@@ -1,0 +1,36 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.ventana {
+    position: fixed;
+    bottom: 90px;
+    right: 30px;
+    width: 320px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn .2s ease;
+}
+
+button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    background: #673ab7;
+    color: #fff;
+    border-radius: 8px;
+}
+
+.cerrar {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}

@@ -1,12 +1,14 @@
 <header class="app-header">
-    <div class="header-content">
-      <img src="//www.odapastecamac.gob.mx/wp-content/uploads/2025/01/LOGO-ODAPAS-2025@300x-8.webp" alt="Portal ODAPAS del Municipio de Tecámac" class="logo">
-      <h1>ODAPAS Tecámac</h1>
-      <nav class="main-nav">
-        <a routerLink="/reportes" routerLinkActive="active">Reportes</a>
-        <a routerLink="/callcenter" routerLinkActive="active">Call Center</a>
-        <a routerLink="/encargado" routerLinkActive="active">Encargado</a>
-        <a routerLinkActive="active" (click)="salir()">Salir</a>
-      </nav>
-    </div>
-  </header>
+  <div class="header-content">
+    <img src="//www.odapastecamac.gob.mx/wp-content/uploads/2025/01/LOGO-ODAPAS-2025@300x-8.webp"
+      alt="Portal ODAPAS del Municipio de Tecámac" class="logo">
+    <h1>ODAPAS Tecámac</h1>
+    <nav class="main-nav">
+      <a routerLink="/reportes" routerLinkActive="active" *ngIf="isLogeado">Reportes</a>
+      <a routerLink="/signup" routerLinkActive="active" *ngIf="!isLogeado">Registrar</a>
+      <a routerLink="/singin" routerLinkActive="active" *ngIf="!isLogeado">Login</a>
+      <span style="display: flex; align-items: center;">{{ (isLogeado ? usuarioLogeado?.email: '')}}</span>
+      <a routerLinkActive="active" (click)="salir()" *ngIf="isLogeado">Salir</a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,13 @@
+<h2>Resultado del reporte</h2>
+
+<div class="card" *ngIf="reporte">
+    <p><b>Folio:</b> {{ reporte.folio }}</p>
+    <p><b>Nombre:</b> {{ reporte.nombre }}</p>
+    <p><b>Teléfono:</b> {{ reporte.telefono }}</p>
+    <p><b>Categoría:</b> {{ reporte.categoria }}</p>
+    <p><b>Ubicación:</b> {{ reporte.ubicacion }}</p>
+    <p><b>Fecha:</b> {{ reporte.fecha }}</p>
+    <p><b>Estatus:</b> {{ reporte.estado }}</p>
+
+    <button (click)="descargarPDF()">Descargar PDF</button>
+</div>

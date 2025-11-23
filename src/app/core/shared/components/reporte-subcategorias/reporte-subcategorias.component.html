@@ -1,0 +1,7 @@
+<h3>Subcategorías de {{ categoria }}</h3>
+
+<div class="lista-subcategorias" *ngIf="categoria">
+    <button *ngFor="let s of subcategorias[categoria]" (click)="seleccionar(s)">
+        {{ s }}
+    </button>
+</div>

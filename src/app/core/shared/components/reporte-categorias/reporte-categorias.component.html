@@ -1,0 +1,7 @@
+<h3>Selecciona una categoría</h3>
+
+<div class="lista-categorias">
+    <button *ngFor="let c of categorias" (click)="seleccionar(c)">
+        {{ c }}
+    </button>
+</div>

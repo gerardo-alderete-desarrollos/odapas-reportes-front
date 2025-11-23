@@ -1,12 +1,57 @@
-
 <div class="app-container">
-  <app-header/>
+  <app-header />
   <main class="app-content">
     <router-outlet></router-outlet>
   </main>
-  
-  <app-footer/>
-  
+
+  <app-footer />
+
 </div>
 
+<!-- BOTÓN FLOTANTE -->
+<button class="btn-flotante" (click)="toggleVentana()">
+  <img src="../assets/logo_odapas.jpg" alt="">
+</button>
 
+<!-- VENTANA DE AYUDA -->
+<app-ventana-ayuda *ngIf="ventanaAbierta" (cerrar)="toggleVentana($event)">
+  <!-- MENÚ PRINCIPAL -->
+  <app-menu-ayuda *ngIf="vistaActual === 'menu'" (opcionSeleccionada)="seleccionarOpcion($event)">
+  </app-menu-ayuda>
+
+  <!-- REPORTAR PROBLEMA › CATEGORÍAS -->
+  <app-reporte-categorias *ngIf="vistaActual === 'reporte-categorias'"
+    (categoriaSeleccionada)="onCategoriaSeleccionada($event)">
+  </app-reporte-categorias>
+
+  <!-- REPORTAR PROBLEMA › SUBCATEGORÍAS -->
+  <app-reporte-subcategorias *ngIf="vistaActual === 'reporte-subcategorias'" [categoria]="categoriaSeleccionada"
+    (subcategoriaSeleccionada)="onSubcategoriaSeleccionada($event)">
+  </app-reporte-subcategorias>
+
+  <!-- FORMULARIO PARA GENERAR REPORTE -->
+  <app-formulario-reporte *ngIf="vistaActual === 'formulario-reporte'" [categoria]="categoriaSeleccionada"
+    [subcategoria]="subcategoriaSeleccionada" (enviar)="onReporteGuardado($event)">
+  </app-formulario-reporte>
+
+  <!-- MENÚ ATENCIÓN A CLIENTES -->
+  <app-atencion-clientes *ngIf="vistaActual === 'atencion'" (regresar)="regresarAlMenu()">
+  </app-atencion-clientes>
+
+  <!-- GUÍA DE PAGOS -->
+  <app-como-pagar *ngIf="vistaActual === 'pagos'" (regresar)="regresarAlMenu()">
+  </app-como-pagar>
+
+  <!-- CONSULTAR FOLIO -->
+  <app-consultar-reporte *ngIf="vistaActual === 'consulta-folio'" (buscar)="buscarFolio($event)">
+  </app-consultar-reporte>
+
+  <!-- RESULTADO DE CONSULTA -->
+  <app-resultado-reporte *ngIf="vistaActual === 'resultado-consulta'" [reporte]="reporte" (regresar)="regresarAlMenu()">
+  </app-resultado-reporte>
+
+
+  <!-- MENSAJE FINAL DE REPORTE ENVIADO -->
+  <app-resultado-final-reporte *ngIf="vistaActual === 'resultado-reporte'" (finalizar)="regresarAlMenu()"
+    [reporte]="reporte">
+  </app-resultado-final-reporte>

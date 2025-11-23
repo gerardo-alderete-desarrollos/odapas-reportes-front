@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable, Subject, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
+  changeLogged: Subject<boolean> = new Subject<boolean>();
 
   private api = 'http://localhost:3000/usuarios';
 
-  constructor(private http: HttpClient, private _router: Router) {}
+  constructor(private http: HttpClient, private _router: Router) { }
 
   // -----------------------------------------
   // Registro
@@ -28,7 +29,8 @@ export class UsuarioService {
         if (res.access_token) {
           localStorage.setItem('token', res.access_token);
           localStorage.setItem('usuario', JSON.stringify(res.usuario));
-            this._router.navigate(['/reportes'])
+          this.changeLogged.next(true);
+          this._router.navigate(['/reportes'])
         }
       })
     );
@@ -96,9 +98,9 @@ export class UsuarioService {
     return this.http.get<any[]>(`${this.api}`, {
       headers: this.getAuthHeaders()
     }).pipe(
-      map((usuarios)=> {
+      map((usuarios) => {
         debugger
-        return usuarios.filter( u => u.rol === "tecnico" && u.area === area);
+        return usuarios.filter(u => u.rol === "tecnico" && u.area === area);
       })
     )
   }
@@ -110,6 +112,7 @@ export class UsuarioService {
     debugger
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
+    this.changeLogged.next(true);
     this._router.navigate(['singin']);
   }
 }

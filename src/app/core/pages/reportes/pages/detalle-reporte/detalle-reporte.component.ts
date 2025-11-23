@@ -6,7 +6,7 @@ import { Reporte } from 'src/app/core/shared/interfaces/reporte.model';
 import { BitacoraService } from 'src/app/core/shared/services/bitacora.service';
 import { ReporteService } from 'src/app/core/shared/services/reporte.service';
 import { UsuarioService } from 'src/app/core/shared/services/usuario.service';
-
+import Swal from 'sweetalert2';
 
 
 
@@ -109,13 +109,14 @@ export class DetalleReporteComponent implements OnInit {
       this.reporteService.updateReporte(this.reporteId!, this.reporte).subscribe({
 
         next: (resp) => {
-          alert('Tecnico asingando correctamente');
+          Swal.fire('Exitoso', 'El tecnico pudo ser asignado ', 'info');
+
           this.volverALista();
           this.limpiarFormulario
 
         },
         error: (err) => {
-          alert('Error al asignar tecnico');
+          Swal.fire('Error', 'El tecnico no se pudo asignar ', 'info');
         }
       });
     }
@@ -130,12 +131,12 @@ export class DetalleReporteComponent implements OnInit {
       this.reporteService.updateReporte(this.reporteId!, this.reporte).subscribe({
 
         next: (resp) => {
-          alert('Tecnico asingando correctamente');
+          Swal.fire('Exitoso', 'El tecnico pudo se asignado exitosamente', 'info');
           this.agregarBitacora();
 
         },
         error: (err) => {
-          alert('Error al asignar tecnico');
+          Swal.fire('Error', 'No se pudo asignar un tecnico', 'info');
         }
       });
     }
@@ -152,13 +153,13 @@ export class DetalleReporteComponent implements OnInit {
       {
 
         next: (resp) => {
-          alert('Comentario agregado correctamente');
+          Swal.fire('Exitoso', 'El comentario a sido agregado correctamente', 'info');
           this.cargarReporte();
           this.limpiarFormulario();
 
         },
         error: (err) => {
-          alert('Error al agregar comentario a bitacora');
+          Swal.fire('Error', 'No se pudo agregar el comentario a la bitacora', 'info');
         }
       });
   }
@@ -175,14 +176,14 @@ export class DetalleReporteComponent implements OnInit {
     if (this.estadoSeleccionado && this.reporteId) {
       this.estadoSeleccionado && this.reporte;
 
-      alert(`Estado actualizado ${this.reporte}`);
+      Swal.fire('Exitoso', 'El estado esta actualizado exitosamente', 'info');
 
       //limpiar formulario
 
       this.notas = '';
       this.estadoSeleccionado = '';
     } else {
-      alert('por favor seleccionaun estado');
+      Swal.fire('Error', 'Es necesario sleccionar un estado', 'info');
     }
   }
 

@@ -1,0 +1,17 @@
+<div class="resultado-container">
+    <h2>Reporte generado correctamente</h2>
+
+    <div class="card">
+        <p><strong>Folio:</strong> {{ reporte.folio }}</p>
+        <p><strong>Nombre:</strong> {{ reporte.nombre }}</p>
+        <p><strong>Teléfono:</strong> {{ reporte.telefono }}</p>
+        <p><strong>Categoría:</strong> {{ reporte.categoria }}</p>
+        <p><strong>Subcategoría:</strong> {{ reporte.subcategoria }}</p>
+        <p><strong>Ubicación:</strong> {{ reporte.ubicacion }}</p>
+        <p><strong>Fecha:</strong> {{ today | date:'dd/MM/yyyy HH:mm' }}</p>
+    </div>
+
+    <button class="btn-finalizar" (click)="cerrar()">
+        Finalizar
+    </button>
+</div>

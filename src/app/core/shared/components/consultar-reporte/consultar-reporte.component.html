@@ -1,0 +1,16 @@
+<h3>Consultar reporte</h3>
+
+<input placeholder="Ingresa folio" [(ngModel)]="folio" />
+<button (click)="consultar()">Buscar</button>
+
+<div *ngIf="resultado" class="resultado">
+    <p><b>Folio:</b> {{ resultado.folio }}</p>
+    <p><b>Nombre:</b> {{ resultado.nombre }}</p>
+    <p><b>Teléfono:</b> {{ resultado.telefono }}</p>
+    <p><b>Categoría:</b> {{ resultado.categoria }}</p>
+    <p><b>Ubicación:</b> {{ resultado.ubicacion }}</p>
+    <p><b>Fecha:</b> {{ resultado.fecha }}</p>
+    <p><b>Estado:</b> {{ resultado.estado }}</p>
+
+    <button (click)="descargarPDF()">Descargar PDF</button>
+</div>
