@@ -51,7 +51,7 @@
 .tarjeta-solicitud {
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
@@ -148,7 +148,7 @@
 .seccion-asignacion {
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
 
   h3 {
@@ -188,7 +188,7 @@
   &:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
 
   option:disabled {
@@ -209,7 +209,7 @@
   &:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
 }
 
@@ -231,7 +231,7 @@
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
   &:disabled {
@@ -247,7 +247,7 @@
   padding: 3rem;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
   h2 {
     color: #dc3545;
@@ -312,4 +312,30 @@
   .textarea-notas {
     font-size: 0.9rem;
   }
+}
+
+.tabla-bitacora {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+
+  th,
+  td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background: #f5f5f5;
+    font-weight: bold;
+  }
+}
+
+.sin-registros {
+  margin-top: 10px;
+  font-style: italic;
+  opacity: .7;
 }

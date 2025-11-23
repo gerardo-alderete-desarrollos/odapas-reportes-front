@@ -14,7 +14,7 @@ export class ReporteService {
   constructor(private http: HttpClient, private usuarioService: UsuarioService) { }
 
   private getHeaders() {
-    const token = localStorage.getItem('token'); // token del login
+    const token = localStorage.getItem('token');
 
     return {
       headers: new HttpHeaders({
@@ -27,21 +27,26 @@ export class ReporteService {
     return this.http.get<Reporte[]>(this.apiUrl, this.getHeaders())
       .pipe(
         map((reportes) => {
-
-          const usuarioLogeado: any = this.usuarioService.getUsuario()
+          const usuarioLogeado: any = this.usuarioService.getUsuario();
 
           switch (usuarioLogeado.rol) {
             case "tecnico":
-              return reportes.filter( r => r.estado === "asignado" && r.usuario_asignado === usuarioLogeado.email )
+              return reportes.filter(r =>
+                r.estado === "asignado" &&
+                r.usuario_asignado === usuarioLogeado.email
+              );
+
             case "callcenter":
-              return reportes.filter( r => r.estado.includes("pendiente"));
+              return reportes.filter(r => r.estado.includes("pendiente"));
+
             case "administrador":
-              return reportes
+              return reportes;
+
             default:
-              return []
+              return [];
           }
         })
-      )
+      );
   }
 
   getReporte(id: number): Observable<Reporte> {
@@ -53,7 +58,15 @@ export class ReporteService {
   }
 
   updateReporte(id: number, data: Reporte): Observable<Reporte> {
-    return this.http.put<Reporte>(`${this.apiUrl}/${id}`, data, this.getHeaders());
+    // 🔥 Reglas nuevas:
+    // Solo asignar usuario si estado = asignado o completado
+    if (data.estado === "asignado" || data.estado === "completado") {
+    } else {
+      // Cualquier otro estado debe limpiar asignación
+      data.usuario_asignado = "";
+    }
+
+    return this.http.patch<Reporte>(`${this.apiUrl}/${id}`, data, this.getHeaders());
   }
 
   deleteReporte(id: number): Observable<void> {

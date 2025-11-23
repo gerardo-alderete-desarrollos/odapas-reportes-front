@@ -12,7 +12,7 @@
         <div class="tarjeta-reporte">
             <div class="tarjeta-cabecera">
                 <h2>reporte {{ reporte.folio }}</h2>
-                <span class="badge-estado" [class]="'estado-' + reporte.estado?.toLowerCase()">
+                <span class="badge-estado" [class]="'estado-' + reporte.estado.toLowerCase()">
                     {{ reporte.estado }}
                 </span>
             </div>
@@ -88,17 +88,10 @@
                     <label for="tecnico">Seleccionar Técnico:</label>
                     <select id="tecnico" [(ngModel)]="tecnicoSeleccionado" class="select-tecnico">
                         <option [ngValue]="null">-- Seleccione un técnico --</option>
-                        <option *ngFor="let tecnico of tecnicos" [value]="tecnico.id">
+                        <option *ngFor="let tecnico of tecnicos" [value]="tecnico.email">
                             {{ tecnico.nombre }} - {{ tecnico.area }} ({{ tecnico.rol }})
                         </option>
                     </select>
-                </div>
-
-                <div class="campo-formulario" *ngIf="tecnicoSeleccionado">
-                    <label for="notas">Notas de Asignación:</label>
-                    <textarea id="notas" [(ngModel)]="notasAsignacion"
-                        placeholder="Agregue notas adicionales para la asignación..." class="textarea-notas"
-                        rows="4"></textarea>
                 </div>
 
                 <div class="acciones">
@@ -108,6 +101,35 @@
                 </div>
             </div>
         </div>
+        <!-- ===================================== -->
+        <!-- HISTÓRICO DE BITÁCORA DEL REPORTE -->
+        <!-- ===================================== -->
+
+        <div class="seccion-bitacora" *ngIf="bitacora.length > 0">
+            <h3>Histórico de Bitácora</h3>
+
+            <table class="tabla-bitacora">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Comentario</th>
+                        <th>Usuario</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let item of bitacora">
+                        <td>{{ item.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
+                        <td>{{ item.comentario }}</td>
+                        <td>{{ item.usuario || 'N/A' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="bitacora.length === 0" class="sin-registros">
+            <p>No hay comentarios en la bitácora.</p>
+        </div>
 
         <!-- Seccion cambiar estado -->
         <div class="seccion-asignacion" *ngIf="usuarioLoggeado.rol === 'tecnico'">
@@ -116,7 +138,7 @@
             <div class="formulario-asignacion">
                 <div class="campo-formulario">
                     <label for="estado">Favor cambia de estado</label>
-                    <select class="select-tecnico">
+                    <select class="select-tecnico" [(ngModel)]="estadoSeleccionado">
                         <option [ngValue]="null">-- Estado --</option>
                         <option value="pendiente">Pendiente</option>
                         <option value="asignado">Asignado</option>
@@ -126,13 +148,13 @@
 
                 <div class="campo-formulario">
                     <label for="notas">Notas de estado:</label>
-                    <textarea id="notas" [(ngModel)]="notasAsignacion"
+                    <textarea id="notas" [(ngModel)]="notas"
                         placeholder="Agregue notas adicionales para la asignación..." class="textarea-notas"
                         rows="4"></textarea>
                 </div>
 
                 <div class="acciones">
-                    <button class="btn-asignar" (click)="asignarTecnico()" [disabled]="!tecnicoSeleccionado">
+                    <button class="btn-asignar" (click)="onSubmit()">
                         Enviar
                     </button>
                 </div>

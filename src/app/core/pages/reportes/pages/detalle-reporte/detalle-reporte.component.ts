@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Reporte } from 'src/app/core/shared/interfaces/reporte.model';
+import { BitacoraService } from 'src/app/core/shared/services/bitacora.service';
 import { ReporteService } from 'src/app/core/shared/services/reporte.service';
 import { UsuarioService } from 'src/app/core/shared/services/usuario.service';
 
@@ -27,19 +28,24 @@ interface Tecnico {
 export class DetalleReporteComponent implements OnInit {
   reporteId: number | null = null;
   reporte: Reporte | null = null;
+  bitacora: any[] = []; // ← NUEVO
 
   tecnicos: Array<any> = [];
 
 
-  tecnicoSeleccionado: number | null = null;
-  notasAsignacion: string = '';
+  tecnicoSeleccionado: string = '';
+  estadoSeleccionado: string = '';
+  notas: string = '';
+
   usuarioLoggeado: any;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private reporteService: ReporteService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private bitacoraService: BitacoraService   // ← NUEVO
+
   ) {
     this.usuarioLoggeado = usuarioService.getUsuario();
   }
@@ -55,15 +61,25 @@ export class DetalleReporteComponent implements OnInit {
       this.reporteService.getReporte(this.reporteId).subscribe({
         next: (resp) => {
           this.reporte = resp;
-
-          console.log('Reporte cargado:', this.reporte);
-              this.obtenerTecnicos();
+          this.obtenerTecnicos();
+          this.cargarBitacora();   // ← NUEVO
         },
-        error: (err) => {
-          console.error('Error al obtener reportes:', err);
-        }
+        error: (err) => console.error(err)
       });
     }
+  }
+
+  cargarBitacora() {
+    if (!this.reporteId) return;
+
+    this.bitacoraService.getByReporte(this.reporteId).subscribe({
+      next: (resp) => {
+        this.bitacora = resp.sort((a, b) => {
+          return new Date(b.fecha_creacion).getTime() - new Date(a.fecha_creacion).getTime();
+        });
+      },
+      error: (err) => console.error('Error cargando bitácora:', err)
+    });
   }
 
   obtenerTecnicos() {
@@ -82,30 +98,80 @@ export class DetalleReporteComponent implements OnInit {
 
 
   asignarTecnico() {
+    debugger
     if (this.tecnicoSeleccionado && this.reporte) {
-      const tecnico = this.tecnicos.find(t => t.id === this.tecnicoSeleccionado);
+
+      this.reporte.estado = 'asignado';
+      this.reporte.usuario_asignado = this.tecnicoSeleccionado;
+
 
       // Aquí iría la lógica para guardar la asignación
-      console.log('Asignando técnico:', {
-        reporteId: this.reporte.id,
-        tecnicoId: this.tecnicoSeleccionado,
-        tecnico: tecnico?.nombre,
-        notas: this.notasAsignacion
+      this.reporteService.updateReporte(this.reporteId!, this.reporte).subscribe({
+
+        next: (resp) => {
+          alert('Tecnico asingando correctamente');
+          this.volverALista();
+          this.limpiarFormulario
+
+        },
+        error: (err) => {
+          alert('Error al asignar tecnico');
+        }
       });
+    }
+  }
+  actualizarBitacora() {
+    debugger
+    if (this.estadoSeleccionado && this.reporte) {
 
-      // Simular guardado exitoso
-      alert(`Técnico ${tecnico?.nombre} asignado correctamente a la reporte ${this.reporte.folio}`);
+      this.reporte.estado = this.estadoSeleccionado;
 
-      // Limpiar formulario
-      this.tecnicoSeleccionado = null;
-      this.notasAsignacion = '';
+      // Aquí iría la lógica para guardar la asignación
+      this.reporteService.updateReporte(this.reporteId!, this.reporte).subscribe({
+
+        next: (resp) => {
+          alert('Tecnico asingando correctamente');
+          this.agregarBitacora();
+
+        },
+        error: (err) => {
+          alert('Error al asignar tecnico');
+        }
+      });
     }
   }
 
-  estadoSeleccionado: string = '';
-  notasEstado: string = '';
+  agregarBitacora() {
+    debugger
+    const bitacoraRequest = {
+      comentario: this.notas,
+      reporteId: this.reporteId
+    }
+
+    this.bitacoraService.createBitacora(bitacoraRequest).subscribe(
+      {
+
+        next: (resp) => {
+          alert('Comentario agregado correctamente');
+          this.cargarReporte();
+          this.limpiarFormulario();
+
+        },
+        error: (err) => {
+          alert('Error al agregar comentario a bitacora');
+        }
+      });
+  }
+
+  limpiarFormulario() {
+    // Limpiar formulario
+    this.tecnicoSeleccionado = "";
+    this.notas = '';
+    this.estadoSeleccionado = "";
+  }
 
   actualizarEstado() {
+    debugger
     if (this.estadoSeleccionado && this.reporteId) {
       this.estadoSeleccionado && this.reporte;
 
@@ -113,7 +179,7 @@ export class DetalleReporteComponent implements OnInit {
 
       //limpiar formulario
 
-      this.notasEstado = '';
+      this.notas = '';
       this.estadoSeleccionado = '';
     } else {
       alert('por favor seleccionaun estado');
@@ -123,6 +189,16 @@ export class DetalleReporteComponent implements OnInit {
 
   volverALista() {
     this.router.navigate(['/reportes']);
+  }
+
+  onSubmit() {
+    debugger
+
+    if (this.usuarioLoggeado.rol === "tecnico") {
+      this.actualizarBitacora();
+    } else if (this.usuarioLoggeado.rol === "callcenter") {
+      this.asignarTecnico();
+    }
   }
 }
 
